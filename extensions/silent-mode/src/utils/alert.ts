@@ -16,7 +16,8 @@ export function checkIfSilentMode() {
 }
 
 export function getAlertVolumePreference() {
-  const alertVolume = Number(getPreferenceValues()["alert-volume"]);
+  const alertVolumePreference = getPreferenceValues()["alert-volume"];
+  const alertVolume = Number(alertVolumePreference === "" ? 100 : alertVolumePreference);
   if (Number.isNaN(alertVolume) || alertVolume < 1 || alertVolume > 100) {
     throw new Error("Invalid alert volume preference");
   }
