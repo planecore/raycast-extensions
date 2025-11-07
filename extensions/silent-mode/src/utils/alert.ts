@@ -25,11 +25,11 @@ export async function checkIfSilentMode(): Promise<boolean> {
 export function getAlertVolumePreference(): number {
   const { "alert-volume": alertVolumePreference } = getPreferenceValues<Preferences>();
   const alertVolume = Number(alertVolumePreference || DEFAULT_ALERT_VOLUME);
-  
+
   if (Number.isNaN(alertVolume) || alertVolume < MIN_VOLUME || alertVolume > MAX_VOLUME) {
     throw new Error("Invalid alert volume preference");
   }
-  
+
   return alertVolume;
 }
 
@@ -38,10 +38,10 @@ export async function toggleSilentMode(action?: "on" | "off"): Promise<void> {
     const currentAction = action || ((await checkIfSilentMode()) ? "off" : "on");
     const targetVolume = currentAction === "on" ? SILENT_VOLUME : getAlertVolumePreference();
     await setAlertVolume(targetVolume);
-    
+
     // Silently fail menu bar refresh - it's not critical for the main operation
     launchCommand({ name: "silent-mode-menu-bar", type: LaunchType.Background }).catch(() => {});
-    
+
     showHUD(`Silent mode ${currentAction}`);
   } catch (error) {
     if (error instanceof Error && error.message === "Invalid alert volume preference") {
